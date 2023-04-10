@@ -28,9 +28,10 @@ export const createAdmin = async () => {
   // check for an existing admin user
   const userFound = await User.findOne({ email: "aa@33377.dofes" });
   const userCode = await User.findOne({ correoElectronico: 'aa@33377.dofes' });
-  if (userFound) return;
-
-  // get roles _id
+  if (userFound) {
+    return
+  }else{
+    // get roles _id
   const roles = await Role.find({ name: { $in: ["admin", "moderator"] } });
 
   // create a new admin user
@@ -54,6 +55,9 @@ export const createAdmin = async () => {
     });
   }
   console.log(`new user created: ${newUser.email} `);
+  }
+
+  
 };
 
 createRoles();
