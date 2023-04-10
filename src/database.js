@@ -1,8 +1,9 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://2000djpz:lmXQUP3gN37hauJr@cluster0.npo2fgu.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test");
-  // perform actions on the collection object
-  client.close();
-});
+import mongoose from "mongoose";
+
+mongoose.set('strictQuery', true);
+mongoose.connect("mmongodb+srv://2000djpz:<password>@cluster0.npo2fgu.mongodb.net/?retryWrites=true&w=majority",{
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(db => console.log('Db is connected'))
+.catch(error => console.log(error))
