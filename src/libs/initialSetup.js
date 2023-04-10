@@ -60,6 +60,6 @@ export const createAdmin = async () => {
   
 };
 
-createRoles();
+// createRoles();
 createAdmin();
 
