@@ -1,0 +1,12 @@
+{
+    "username":"David Enrique Lopez Juarez" ,
+    "email":"david@gmail.com" ,
+    "password":"hyh7839djndjn",
+    "roles":["moderator","admin"]
+}
+
+{
+    "username":"Fatima" ,
+    "email":"fatima@gmail.com" ,
+    "password":"hyh7839djndjn"
+}
