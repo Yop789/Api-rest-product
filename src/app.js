@@ -10,7 +10,6 @@ const app = express();
 createRoles();
 
 app.set("pkg", pkg)
-app.use(express.urlencoded({ limit: '50000', extended: true }))
 app.use(express.json())
 app.use(morgan("dev"));
 
