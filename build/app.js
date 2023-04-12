@@ -18,10 +18,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var app = (0, _express["default"])();
 (0, _initialSetup.createRoles)();
 app.set("pkg", _package["default"]);
-app.use(_express["default"].urlencoded({
-  limit: '50000',
-  extended: true
-}));
 app.use(_express["default"].json());
 app.use((0, _morgan["default"])("dev"));
 var corsOptions = {
