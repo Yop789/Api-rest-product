@@ -1,9 +1,9 @@
 import { transporter } from "../config/gmailTrasporter";
-const codigoEmail = "../EnviarGmail/gmaiCode.html";
 const codigoOrder = "../EnviarGmail/orderhtml.html";
 const fs = require('fs')
 
 export const enviarEmailCodigo = (codigo, email) => {
+  const codigoEmail = path.join(__dirname, 'EnviarGmail', 'gmaiCode.html');
   const htmlContent = fs.readFileSync(codigoEmail+'', "utf8");
   const emailHtml = htmlContent.replace(/{{codigo}}/g, codigo).replace(/{{email}}/g, email);
   console.log("Email a Administrador");
