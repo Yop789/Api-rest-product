@@ -21,7 +21,7 @@ app.set("pkg", _package["default"]);
 app.use(_express["default"].json());
 app.use((0, _morgan["default"])("dev"));
 var corsOptions = {
-  origin: 'https://doparty.onrender.com',
+  origin: ['https://doparty.onrender.com', 'http://localhost:4200'],
   // reemplace con la URL de su aplicación Angular
   optionsSuccessStatus: 200 // algunos navegadores restringen las respuestas a 204
 };

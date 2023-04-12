@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(morgan("dev"));
 
 const corsOptions = {
-  origin: 'https://doparty.onrender.com', // reemplace con la URL de su aplicación Angular
+  origin: ['https://doparty.onrender.com','http://localhost:4200'], // reemplace con la URL de su aplicación Angular
   optionsSuccessStatus: 200 // algunos navegadores restringen las respuestas a 204
 }
 

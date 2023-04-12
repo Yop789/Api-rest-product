@@ -64,6 +64,9 @@ router.route('/user/:userId')
     .get(autheJWT.verifyToken, userCtrol.getUser)
     .put(autheJWT.verifyToken, userCtrol.updateUserById)
 
+router.route('/users')
+    .get(userCtrol.getUsers)
+
 router.route('/productType')
     .post(autheJWT.verifyToken,productsCtrol.getProductsType)
 
