@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 mongoose.set('strictQuery', true);
 mongoose.connect("mongodb://127.0.0.1:27017/BD_Dofest",{
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+  serverSelectionTimeoutMS: 5000
 })
 .then(db => console.log('Db is connected'))
 .catch(error =>{
