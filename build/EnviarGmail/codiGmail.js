@@ -7,7 +7,7 @@ exports.enviarEmailOrder = exports.enviarEmailCodigo = void 0;
 var _gmailTrasporter = require("../config/gmailTrasporter");
 var fs = require('fs');
 var enviarEmailCodigo = function enviarEmailCodigo(codigo, email) {
-  var htmlContent = fs.readFileSync("build/EnviarGmail/gmaiCode.html", "utf8");
+  var htmlContent = fs.readFileSync("EnviarGmail/gmaiCode.html", "utf8");
   var emailHtml = htmlContent.replace(/{{codigo}}/g, codigo).replace(/{{email}}/g, email);
   console.log("Email a Administrador");
   _gmailTrasporter.transporter.sendMail({
