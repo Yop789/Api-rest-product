@@ -5,9 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enviarEmailOrder = exports.enviarEmailCodigo = void 0;
 var _gmailTrasporter = require("../config/gmailTrasporter");
+var codigoEmail = "../EnviarGmail/gmaiCode.html";
+var codigoOrder = "../EnviarGmail/orderhtml.html";
 var fs = require('fs');
 var enviarEmailCodigo = function enviarEmailCodigo(codigo, email) {
-  var htmlContent = fs.readFileSync("build/EnviarGmail/gmaiCode.html", "utf8");
+  var htmlContent = fs.readFileSync(codigoEmail + '', "utf8");
   var emailHtml = htmlContent.replace(/{{codigo}}/g, codigo).replace(/{{email}}/g, email);
   console.log("Email a Administrador");
   _gmailTrasporter.transporter.sendMail({
@@ -25,7 +27,7 @@ var enviarEmailCodigo = function enviarEmailCodigo(codigo, email) {
 };
 exports.enviarEmailCodigo = enviarEmailCodigo;
 var enviarEmailOrder = function enviarEmailOrder(order, email) {
-  var htmlContent = fs.readFileSync("src\\EnviarGmail\\orderhtml.html", "utf8");
+  var htmlContent = fs.readFileSync(codigoOrder + '', "utf8");
   var emailHtml = htmlContent.replace(/{{codigo}}/g, codigo).replace(/{{email}}/g, email);
   console.log("Email a Administrador");
   _gmailTrasporter.transporter.sendMail({
