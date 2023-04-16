@@ -27,6 +27,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var router = (0, _express.Router)();
 router.route('/products').post([_index.autheJWT.verifyToken, _index.autheJWT.isAdmin], _multer["default"].single('imagePath'), productsCtrol.createProduct).get(productsCtrol.getProducts);
 router.route('/product/:productId').get(productsCtrol.getProductById).put(productsCtrol.updateProductById)["delete"](productsCtrol.deleteProductById);
+router.route('/filtrar/:nombre').get(_index.autheJWT.verifyToken, productsCtrol.Filtrar);
 router.post('/signup', authCtrol.signUp);
 router.post('/signin', authCtrol.signIn);
 router.route('/cart').post(_index.autheJWT.verifyToken, cartCtrol.createCart).get(_index.autheJWT.verifyToken, cartCtrol.getCart).put(_index.autheJWT.verifyToken, cartCtrol.updateCart)["delete"](_index.autheJWT.verifyToken, cartCtrol.deleteCart);

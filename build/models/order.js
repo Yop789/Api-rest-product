@@ -85,6 +85,10 @@ var orderSchema = new _mongoose.Schema({
       type: String,
       require: true
     },
+    type: {
+      type: String,
+      require: true
+    },
     amount: {
       type: Number,
       require: true
