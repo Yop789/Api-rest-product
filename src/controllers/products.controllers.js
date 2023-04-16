@@ -89,6 +89,18 @@ export const deleteProductById = async (req, res) => {
       });
   }
 };
+export const Filtrar = async (req, res) => {
+  try {
+    const product = await Product.find({ nameProduct: { $regex: `.*${req.params.nombre}.*`, $options: "i" } })
+    res.status(200).json(product);
+  } catch (error) {
+    res
+      .status(404)
+      .json({
+        message: "Se encontro un error a la hora de filtrar los productos",
+      });
+  }
+};
 
 export const carrucel = async (req, res) => {
   const carrucel = await Product.aggregate([

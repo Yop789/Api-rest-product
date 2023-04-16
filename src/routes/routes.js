@@ -25,6 +25,9 @@ router.route('/product/:productId')
     .put(productsCtrol.updateProductById)
     .delete(productsCtrol.deleteProductById)
 
+router.route('/filtrar/:nombre')
+    .get(autheJWT.verifyToken,productsCtrol.Filtrar)
+
 router. post('/signup',authCtrol.signUp)
 router. post('/signin',authCtrol.signIn)
 

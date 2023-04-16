@@ -25,6 +25,8 @@ const orderSchema = new Schema(
           require: true },
         description:{ type: String,
           require: true},
+        type:{ type: String,
+            require: true},
         amount:{type: Number,
           require: true},
         total: {type: Number,
