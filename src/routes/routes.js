@@ -66,6 +66,9 @@ router.route('/cPostal')
 router.route('/user/:userId')
     .get(autheJWT.verifyToken, userCtrol.getUser)
     .put(autheJWT.verifyToken, userCtrol.updateUserById)
+    .delete(autheJWT.verifyToken,userCtrol.deleteUser)
+
+
 
 router.route('/users')
     .get(autheJWT.verifyToken,userCtrol.getUsers)

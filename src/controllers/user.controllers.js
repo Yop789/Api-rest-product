@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import Role from "../models/Role.js";
+import jwt from "jsonwebtoken";
+import config from "../config";
 
 export const createUser = async (req, res) => {
   try {
@@ -33,17 +35,44 @@ export const createUser = async (req, res) => {
 };
 
 export const getUsers = async (req, res) => {
-  const users = await User.find();
-  return res.json(users);
+  try {
+    let token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, config.Secret);
+    const users = await User.find({ _id: { $ne: decoded.id }});
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log(error)
+  }
+
 };
 
 export const getUser = async (req, res) => {
-  const user = await User.findById(req.params.userId);
-  return res.json(user);
+  try {
+    const user = await User.findById(req.params.userId).populate("roles");
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error)
+  }
+
+};
+
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.userId);
+    return res.status(200).json({menssage:'Usuario eliminado correctamente'});
+  } catch (error) {
+    return res.status(400).json({menssage:'Fallo al eliminar'});
+  }
+
 };
 export const updateUserById = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body.roles);
+    if (req.body.roles) {
+      const foundRoles = await Role.find({ name: { $in: req.body.roles } });
+      req.body.roles = foundRoles.map((role) => role._id);
+    } 
     const updateUser = await User.findByIdAndUpdate(
       req.params.userId,
       req.body,
@@ -61,13 +90,13 @@ export const updateUserById = async (req, res) => {
 
 export const cambiarContraseña = async (req, res) => {
   try {
-    const { correoElectronico,password } = req.body;
-    const l={
-      password:await User.encryptPassword(password)
-     }
-     const user = await User.find({ email: correoElectronico });
+    const { correoElectronico, password } = req.body;
+    const l = {
+      password: await User.encryptPassword(password)
+    }
+    const user = await User.find({ email: correoElectronico });
     console.log(req.body.correoElectronico)
-     
+
     if (user.length > 0) {
       const ubdateUser = await User.updateOne(
         { email: correoElectronico },
@@ -77,8 +106,8 @@ export const cambiarContraseña = async (req, res) => {
         }
       );
       res.status(201).json({ messege: "Actualisasion existosa" });
-    }else{
-      res.status(404).json({messege:"Correo no encontrado"})
+    } else {
+      res.status(404).json({ messege: "Correo no encontrado" })
     }
   } catch (error) {
     console.log(error)

@@ -31,35 +31,34 @@ var verifyToken = /*#__PURE__*/function () {
           _context.prev = 3;
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
           req.userId = decoded.id;
-          console.log(req.userId);
-          _context.next = 9;
+          _context.next = 8;
           return _User["default"].findById(req.userId, {
             password: 0
           });
-        case 9:
+        case 8:
           user = _context.sent;
           if (user) {
-            _context.next = 12;
+            _context.next = 11;
             break;
           }
           return _context.abrupt("return", res.status(404).json({
             message: "No user found"
           }));
-        case 12:
+        case 11:
           next();
-          _context.next = 18;
+          _context.next = 17;
           break;
-        case 15:
-          _context.prev = 15;
+        case 14:
+          _context.prev = 14;
           _context.t0 = _context["catch"](3);
           return _context.abrupt("return", res.status(401).json({
             message: "Unauthorized!"
           }));
-        case 18:
+        case 17:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[3, 15]]);
+    }, _callee, null, [[3, 14]]);
   }));
   return function verifyToken(_x, _x2, _x3) {
     return _ref.apply(this, arguments);

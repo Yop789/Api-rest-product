@@ -40,7 +40,7 @@ router.route('/carrucel').get(productsCtrol.carrucel);
 router.route('/cPostal').post(_cp.getRegioCP);
 
 // ----------------------------------------------------------------------
-router.route('/user/:userId').get(_index.autheJWT.verifyToken, userCtrol.getUser).put(_index.autheJWT.verifyToken, userCtrol.updateUserById);
+router.route('/user/:userId').get(_index.autheJWT.verifyToken, userCtrol.getUser).put(_index.autheJWT.verifyToken, userCtrol.updateUserById)["delete"](_index.autheJWT.verifyToken, userCtrol.deleteUser);
 router.route('/users').get(_index.autheJWT.verifyToken, userCtrol.getUsers);
 router.route('/productType').post(_index.autheJWT.verifyToken, productsCtrol.getProductsType);
 router.route('/productTypeLimit').post(productsCtrol.getProductsTypeLimit);
