@@ -108,3 +108,13 @@ export const deleteOrder = async (req, res) => {
   }
 };
 
+export const getOrderActualizaciones = async (req, res) => {
+  try {
+    const order = await Orders.find({}).sort({updatedAt:1}).limit(3);
+    res.status(201).json(order);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ message: "Se produjo un error a la hora de solicitar la Order" });
+  }
+};

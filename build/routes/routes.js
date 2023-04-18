@@ -30,7 +30,7 @@ router.route('/product/:productId').get(productsCtrol.getProductById).put(produc
 router.route('/filtrar/:nombre').get(_index.autheJWT.verifyToken, productsCtrol.Filtrar);
 router.post('/signup', authCtrol.signUp);
 router.post('/signin', authCtrol.signIn);
-router.route('/cart').post(_index.autheJWT.verifyToken, cartCtrol.createCart).get(_index.autheJWT.verifyToken, cartCtrol.getCart).put(_index.autheJWT.verifyToken, cartCtrol.updateCart)["delete"](_index.autheJWT.verifyToken, cartCtrol.deleteCart);
+router.route('/carts').get(_index.autheJWT.verifyToken, cartCtrol.getCart).post(_index.autheJWT.verifyToken, cartCtrol.createCart).put(_index.autheJWT.verifyToken, cartCtrol.updateCart)["delete"](_index.autheJWT.verifyToken, cartCtrol.deleteCart);
 router.route('/order').post(_index.autheJWT.verifyToken, OrderCtrol.createOrder).get(_index.autheJWT.verifyToken, OrderCtrol.getOrders);
 router.route('/order/:productId').put(_index.autheJWT.verifyToken, OrderCtrol.updateOrder).get(_index.autheJWT.verifyToken, OrderCtrol.getOrder)["delete"](_index.autheJWT.verifyToken, OrderCtrol.deleteOrder);
 router.route('/codigo').post(codigoCtrol.createCodigo);
@@ -44,5 +44,9 @@ router.route('/user/:userId').get(_index.autheJWT.verifyToken, userCtrol.getUser
 router.route('/users').get(_index.autheJWT.verifyToken, userCtrol.getUsers);
 router.route('/productType').post(_index.autheJWT.verifyToken, productsCtrol.getProductsType);
 router.route('/productTypeLimit').post(productsCtrol.getProductsTypeLimit);
+// ------------------------------
+router.route('/usersA').get(_index.autheJWT.verifyToken, userCtrol.getUserActualizaciones);
+router.route('/productA').get(_index.autheJWT.verifyToken, productsCtrol.getProductsActualizaciones);
+router.route('/orderA').get(_index.autheJWT.verifyToken, OrderCtrol.getOrderActualizaciones);
 var _default = router;
 exports["default"] = _default;

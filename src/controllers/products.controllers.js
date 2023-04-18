@@ -2,7 +2,7 @@ import Product from "../models/Products";
 
 export const createProduct = async (req, res) => {
   try {
-    console.log(req.body);
+    console.log('Creando Producto .....');
     const {
       nameProduct,
       description,
@@ -14,7 +14,6 @@ export const createProduct = async (req, res) => {
       price,
       oferta
     } = req.body;
-    console.log(req.file?.path);
 
     const newProduct = new Product({
       nameProduct,
@@ -28,9 +27,9 @@ export const createProduct = async (req, res) => {
       imagePath: req.file?.path,
       oferta:oferta
     });
-    console.log(newProduct);
+    
     const productSeve = await newProduct.save();
-
+    console.log('Producto creado');
     res.status(201).json(productSeve);
   } catch (error) {
     console.log(error);
@@ -133,7 +132,6 @@ export const getProductsType = async (req, res) => {
   try {
     
     const products = await Product.find({type:req.body.type},{});
-    console.log(products)
     res.status(200).json(products);
   } catch (error) {
     res
@@ -146,7 +144,6 @@ export const getProductsTypeLimit = async (req, res) => {
   try {
     
     const products = await Product.find({type:req.body.type},{}).limit(4);
-    console.log(products)
     res.status(200).json(products);
   } catch (error) {
     res
@@ -154,3 +151,14 @@ export const getProductsTypeLimit = async (req, res) => {
       .json({ menssage: "Sucedio un error a la hora de optener el producto" });
   }
 };
+export const getProductsActualizaciones = async (req, res) => {
+  try {
+    const products = await Product.find({}).sort({updatedAt:1}).limit(4);
+    res.json(products);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ menssage: "Sucedio un error a la hora de optener el producto" });
+  }
+};
+

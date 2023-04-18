@@ -116,3 +116,12 @@ export const cambiarContraseña = async (req, res) => {
     });
   }
 };
+export const getUserActualizaciones = async (req, res) => {
+  try {
+    const user = await User.find({}).sort({updatedAt:1}).limit(3).populate("roles");
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error)
+  }
+
+};

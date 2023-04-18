@@ -4,7 +4,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateOrder = exports.getOrders = exports.getOrder = exports.deleteOrder = exports.createOrder = void 0;
+exports.updateOrder = exports.getOrders = exports.getOrderActualizaciones = exports.getOrder = exports.deleteOrder = exports.createOrder = void 0;
 var _order = _interopRequireDefault(require("../models/order"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _config = _interopRequireDefault(require("../config"));
@@ -205,3 +205,36 @@ var deleteOrder = /*#__PURE__*/function () {
   };
 }();
 exports.deleteOrder = deleteOrder;
+var getOrderActualizaciones = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
+    var order;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.prev = 0;
+          _context6.next = 3;
+          return _order["default"].find({}).sort({
+            updatedAt: 1
+          }).limit(3);
+        case 3:
+          order = _context6.sent;
+          res.status(201).json(order);
+          _context6.next = 10;
+          break;
+        case 7:
+          _context6.prev = 7;
+          _context6.t0 = _context6["catch"](0);
+          res.status(404).json({
+            message: "Se produjo un error a la hora de solicitar la Order"
+          });
+        case 10:
+        case "end":
+          return _context6.stop();
+      }
+    }, _callee6, null, [[0, 7]]);
+  }));
+  return function getOrderActualizaciones(_x11, _x12) {
+    return _ref6.apply(this, arguments);
+  };
+}();
+exports.getOrderActualizaciones = getOrderActualizaciones;

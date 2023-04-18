@@ -4,7 +4,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateUserById = exports.getUsers = exports.getUser = exports.deleteUser = exports.createUser = exports.cambiarContraseña = void 0;
+exports.updateUserById = exports.getUsers = exports.getUserActualizaciones = exports.getUser = exports.deleteUser = exports.createUser = exports.cambiarContraseña = void 0;
 var _User = _interopRequireDefault(require("../models/User.js"));
 var _Role = _interopRequireDefault(require("../models/Role.js"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
@@ -272,3 +272,32 @@ var cambiarContraseña = /*#__PURE__*/function () {
   };
 }();
 exports.cambiarContraseña = cambiarContraseña;
+var getUserActualizaciones = /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
+    var user;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          _context7.prev = 0;
+          _context7.next = 3;
+          return _User["default"].find({}).sort({
+            updatedAt: 1
+          }).limit(3).populate("roles");
+        case 3:
+          user = _context7.sent;
+          return _context7.abrupt("return", res.status(200).json(user));
+        case 7:
+          _context7.prev = 7;
+          _context7.t0 = _context7["catch"](0);
+          console.log(_context7.t0);
+        case 10:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[0, 7]]);
+  }));
+  return function getUserActualizaciones(_x13, _x14) {
+    return _ref7.apply(this, arguments);
+  };
+}();
+exports.getUserActualizaciones = getUserActualizaciones;

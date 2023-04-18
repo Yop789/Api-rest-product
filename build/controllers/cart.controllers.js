@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.updateCart = exports.getCart = exports.deleteCart = exports.createCart = void 0;
-var _cart = _interopRequireDefault(require("../models/cart"));
+var _cart3 = _interopRequireDefault(require("../models/cart"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _config = _interopRequireDefault(require("../config"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -14,43 +14,84 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var createCart = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var token, decoded, products, newCart, cart, cartSeve;
+    var token, decoded, exist, cart, _cart, products, newCart, _cart2, cartSeve;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
           token = req.headers["x-access-token"];
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
-          req.userId = decoded.id;
           console.log("Saving Cart");
-          console.log(req.body);
+          _context.next = 6;
+          return _cart3["default"].find({
+            idUser: decoded.id
+          });
+        case 6:
+          exist = _context.sent;
+          if (!(exist.length > 0)) {
+            _context.next = 22;
+            break;
+          }
+          console.log(req.body.products);
+          if (!(req.body.products.length === 0)) {
+            _context.next = 16;
+            break;
+          }
+          _context.next = 12;
+          return _cart3["default"].deleteOne({
+            idUser: decoded.id
+          });
+        case 12:
+          cart = _context.sent;
+          res.status(201).json({
+            message: "Se ha eliminado correctamente completa"
+          });
+          _context.next = 20;
+          break;
+        case 16:
+          _context.next = 18;
+          return _cart3["default"].updateOne({
+            idUser: decoded.id
+          }, req.body, {
+            "new": true
+          });
+        case 18:
+          _cart = _context.sent;
+          res.status(201).json({
+            message: "Actualizacion completa"
+          });
+        case 20:
+          _context.next = 30;
+          break;
+        case 22:
           products = req.body.products;
           newCart = {
-            idUser: req.userId,
+            idUser: decoded.id,
             products: products
           };
-          cart = new _cart["default"](newCart);
-          _context.next = 11;
-          return cart.save();
-        case 11:
+          _cart2 = new _cart3["default"](newCart);
+          _context.next = 27;
+          return _cart2.save();
+        case 27:
           cartSeve = _context.sent;
-          console.log(cart);
+          console.log(_cart2);
           res.status(201).json({
             message: "Cart succesfully saved"
           });
-          _context.next = 19;
+        case 30:
+          _context.next = 35;
           break;
-        case 16:
-          _context.prev = 16;
+        case 32:
+          _context.prev = 32;
           _context.t0 = _context["catch"](0);
           res.status(404).json({
             message: "Se produjo un error a la hora de crear un cart"
           });
-        case 19:
+        case 35:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 16]]);
+    }, _callee, null, [[0, 32]]);
   }));
   return function createCart(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -66,27 +107,37 @@ var getCart = /*#__PURE__*/function () {
           _context2.prev = 0;
           token = req.headers["x-access-token"];
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
-          req.userId = decoded.id;
-          _context2.next = 6;
-          return _cart["default"].find({
-            idUser: req.userId
+          _context2.next = 5;
+          return _cart3["default"].find({
+            idUser: decoded.id
           });
-        case 6:
+        case 5:
           cart = _context2.sent;
-          res.status(201).json(cart);
-          _context2.next = 13;
+          if (!(cart.length !== 0)) {
+            _context2.next = 10;
+            break;
+          }
+          res.status(200).json(cart);
+          _context2.next = 11;
           break;
         case 10:
-          _context2.prev = 10;
+          return _context2.abrupt("return", res.json({
+            message: 'Nu hay camionsito precargado'
+          }));
+        case 11:
+          _context2.next = 16;
+          break;
+        case 13:
+          _context2.prev = 13;
           _context2.t0 = _context2["catch"](0);
           res.status(404).json({
             message: "Se produjo un error a la hora de crear un getCarts"
           });
-        case 13:
+        case 16:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[0, 10]]);
+    }, _callee2, null, [[0, 13]]);
   }));
   return function getCart(_x3, _x4) {
     return _ref2.apply(this, arguments);
@@ -102,10 +153,10 @@ var updateCart = /*#__PURE__*/function () {
           _context3.prev = 0;
           token = req.headers["x-access-token"];
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
-          req.userId = decoded.id;
+          req.body.idUser = decoded.id;
           _context3.next = 6;
-          return _cart["default"].updateOne({
-            idUser: req.userId
+          return _cart3["default"].updateOne({
+            idUser: decoded.id
           }, req.body, {
             "new": true
           });
@@ -142,29 +193,28 @@ var deleteCart = /*#__PURE__*/function () {
           _context4.prev = 0;
           token = req.headers["x-access-token"];
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
-          req.userId = decoded.id;
-          _context4.next = 6;
-          return _cart["default"].deleteOne({
-            idUser: req.userId
+          _context4.next = 5;
+          return _cart3["default"].deleteOne({
+            idUser: decoded.id
           });
-        case 6:
+        case 5:
           cart = _context4.sent;
           res.status(201).json({
             message: "Se ha eliminado correctamente completa"
           });
-          _context4.next = 13;
+          _context4.next = 12;
           break;
-        case 10:
-          _context4.prev = 10;
+        case 9:
+          _context4.prev = 9;
           _context4.t0 = _context4["catch"](0);
           res.status(404).json({
             message: "Se produjo un error a la hora de actualizar un getCarts"
           });
-        case 13:
+        case 12:
         case "end":
           return _context4.stop();
       }
-    }, _callee4, null, [[0, 10]]);
+    }, _callee4, null, [[0, 9]]);
   }));
   return function deleteCart(_x7, _x8) {
     return _ref4.apply(this, arguments);
