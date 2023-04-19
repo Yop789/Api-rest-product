@@ -36,6 +36,7 @@ router.route('/carts').get(_index.autheJWT.verifyToken, cartCtrol.getCart).post(
 router.route('/order').post(_index.autheJWT.verifyToken, OrderCtrol.createOrder).get(_index.autheJWT.verifyToken, OrderCtrol.getOrders);
 router.route('/order/:productId').put(_index.autheJWT.verifyToken, OrderCtrol.updateOrder).get(_index.autheJWT.verifyToken, OrderCtrol.getOrder)["delete"](_index.autheJWT.verifyToken, OrderCtrol.deleteOrder);
 router.route('/orderUser').get(_index.autheJWT.verifyToken, OrderCtrol.getOrderUser);
+router.route('/orderProduct/:productId').get(OrderCtrol.getProductsDian).post(OrderCtrol.getProductsDianExacto);
 
 // --------------------codigo------------------
 
