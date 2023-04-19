@@ -26,7 +26,7 @@ export const createOrder = async (req, res) => {
       dateReturn,
       days,
       totalPrecio,
-      Products,
+      products,
     } = req.body;
     console.log(req.body.products)
     const newOrder = {
@@ -45,11 +45,11 @@ export const createOrder = async (req, res) => {
       dateReturn:dateReturn,
       days:days,
       totalPrecio:totalPrecio,
-      products:Products,
+      products:products,
     };
     const order = new Orders(newOrder);
     const orderSeve = await order.save();
-    enviar.enviarEmailOrder(newOrder,email)
+
     res.status(201).json({ message: "Order succesfully saved" });
   } catch (error) {
     res
