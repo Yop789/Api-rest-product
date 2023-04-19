@@ -4,7 +4,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateOrder = exports.getOrders = exports.getOrderActualizaciones = exports.getOrder = exports.deleteOrder = exports.createOrder = void 0;
+exports.updateOrder = exports.getOrders = exports.getOrderUser = exports.getOrderActualizaciones = exports.getOrder = exports.deleteOrder = exports.createOrder = void 0;
 var _order = _interopRequireDefault(require("../models/order"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _config = _interopRequireDefault(require("../config"));
@@ -17,7 +17,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var createOrder = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var token, decoded, _req$body, status, fullNameUser, paid, municipio, comunidad, calle, numero, email, telefono, dateDeliver, dateEvent, dateReturn, days, totalPrecio, Products, newOrder, order, orderSeve;
+    var token, decoded, _req$body, status, fullNameUser, paid, municipio, comunidad, calle, numero, email, telefono, dateDeliver, dateEvent, dateReturn, days, totalPrecio, products, newOrder, order, orderSeve;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -27,7 +27,7 @@ var createOrder = /*#__PURE__*/function () {
           req.userId = decoded.id;
           console.log("Saving Cart");
           console.log(req.body);
-          _req$body = req.body, status = _req$body.status, fullNameUser = _req$body.fullNameUser, paid = _req$body.paid, municipio = _req$body.municipio, comunidad = _req$body.comunidad, calle = _req$body.calle, numero = _req$body.numero, email = _req$body.email, telefono = _req$body.telefono, dateDeliver = _req$body.dateDeliver, dateEvent = _req$body.dateEvent, dateReturn = _req$body.dateReturn, days = _req$body.days, totalPrecio = _req$body.totalPrecio, Products = _req$body.Products;
+          _req$body = req.body, status = _req$body.status, fullNameUser = _req$body.fullNameUser, paid = _req$body.paid, municipio = _req$body.municipio, comunidad = _req$body.comunidad, calle = _req$body.calle, numero = _req$body.numero, email = _req$body.email, telefono = _req$body.telefono, dateDeliver = _req$body.dateDeliver, dateEvent = _req$body.dateEvent, dateReturn = _req$body.dateReturn, days = _req$body.days, totalPrecio = _req$body.totalPrecio, products = _req$body.products;
           console.log(req.body.products);
           newOrder = {
             idUser: req.userId,
@@ -45,30 +45,29 @@ var createOrder = /*#__PURE__*/function () {
             dateReturn: dateReturn,
             days: days,
             totalPrecio: totalPrecio,
-            products: Products
+            products: products
           };
           order = new _order["default"](newOrder);
           _context.next = 12;
           return order.save();
         case 12:
           orderSeve = _context.sent;
-          enviar.enviarEmailOrder(newOrder, email);
           res.status(201).json({
             message: "Order succesfully saved"
           });
-          _context.next = 20;
+          _context.next = 19;
           break;
-        case 17:
-          _context.prev = 17;
+        case 16:
+          _context.prev = 16;
           _context.t0 = _context["catch"](0);
           res.status(404).json({
             message: "Se produjo un error a la hora de crear una order"
           });
-        case 20:
+        case 19:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 17]]);
+    }, _callee, null, [[0, 16]]);
   }));
   return function createOrder(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -107,60 +106,60 @@ var getOrder = /*#__PURE__*/function () {
   };
 }();
 exports.getOrder = getOrder;
-var getOrders = /*#__PURE__*/function () {
+var getOrderUser = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
-    var orders;
+    var token, decoded, order;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           _context3.prev = 0;
-          _context3.next = 3;
-          return _order["default"].find();
-        case 3:
-          orders = _context3.sent;
-          res.status(201).json(orders);
-          _context3.next = 10;
+          token = req.headers["x-access-token"];
+          decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
+          _context3.next = 5;
+          return _order["default"].find({
+            idUser: decoded.id
+          });
+        case 5:
+          order = _context3.sent;
+          res.status(201).json(order);
+          _context3.next = 12;
           break;
-        case 7:
-          _context3.prev = 7;
+        case 9:
+          _context3.prev = 9;
           _context3.t0 = _context3["catch"](0);
           res.status(404).json({
-            message: "Sucedio un error a la hora de realizar la peticion"
+            message: "Se produjo un error a la hora de solicitar la Order"
           });
-        case 10:
+        case 12:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 7]]);
+    }, _callee3, null, [[0, 9]]);
   }));
-  return function getOrders(_x5, _x6) {
+  return function getOrderUser(_x5, _x6) {
     return _ref3.apply(this, arguments);
   };
 }();
-exports.getOrders = getOrders;
-var updateOrder = /*#__PURE__*/function () {
+exports.getOrderUser = getOrderUser;
+var getOrders = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
-    var order;
+    var orders;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
-          return _order["default"].findByIdAndUpdate({
-            _id: req.params.productId
-          }, req.body, {
-            "new": true
-          });
+          return _order["default"].find();
         case 3:
-          order = _context4.sent;
-          res.status(201).json(order);
+          orders = _context4.sent;
+          res.status(201).json(orders);
           _context4.next = 10;
           break;
         case 7:
           _context4.prev = 7;
           _context4.t0 = _context4["catch"](0);
           res.status(404).json({
-            message: "Se produjo un error a la hora de actualizar la order"
+            message: "Sucedio un error a la hora de realizar la peticion"
           });
         case 10:
         case "end":
@@ -168,73 +167,108 @@ var updateOrder = /*#__PURE__*/function () {
       }
     }, _callee4, null, [[0, 7]]);
   }));
-  return function updateOrder(_x7, _x8) {
+  return function getOrders(_x7, _x8) {
     return _ref4.apply(this, arguments);
   };
 }();
-exports.updateOrder = updateOrder;
-var deleteOrder = /*#__PURE__*/function () {
+exports.getOrders = getOrders;
+var updateOrder = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
-    var id, order;
+    var order;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           _context5.prev = 0;
-          id = req.params.productId;
-          _context5.next = 4;
-          return _order["default"].findByIdAndDelete(id);
-        case 4:
+          _context5.next = 3;
+          return _order["default"].findByIdAndUpdate({
+            _id: req.params.productId
+          }, req.body, {
+            "new": true
+          });
+        case 3:
           order = _context5.sent;
           res.status(201).json(order);
-          _context5.next = 11;
+          _context5.next = 10;
+          break;
+        case 7:
+          _context5.prev = 7;
+          _context5.t0 = _context5["catch"](0);
+          res.status(404).json({
+            message: "Se produjo un error a la hora de actualizar la order"
+          });
+        case 10:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5, null, [[0, 7]]);
+  }));
+  return function updateOrder(_x9, _x10) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+exports.updateOrder = updateOrder;
+var deleteOrder = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
+    var id, order;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.prev = 0;
+          id = req.params.productId;
+          _context6.next = 4;
+          return _order["default"].findByIdAndDelete(id);
+        case 4:
+          order = _context6.sent;
+          res.status(201).json(order);
+          _context6.next = 11;
           break;
         case 8:
-          _context5.prev = 8;
-          _context5.t0 = _context5["catch"](0);
+          _context6.prev = 8;
+          _context6.t0 = _context6["catch"](0);
           res.status(404).json({
             message: "Se produjo un error a la hora de eliminar la order"
           });
         case 11:
         case "end":
-          return _context5.stop();
+          return _context6.stop();
       }
-    }, _callee5, null, [[0, 8]]);
+    }, _callee6, null, [[0, 8]]);
   }));
-  return function deleteOrder(_x9, _x10) {
-    return _ref5.apply(this, arguments);
+  return function deleteOrder(_x11, _x12) {
+    return _ref6.apply(this, arguments);
   };
 }();
 exports.deleteOrder = deleteOrder;
 var getOrderActualizaciones = /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
     var order;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) switch (_context6.prev = _context6.next) {
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
         case 0:
-          _context6.prev = 0;
-          _context6.next = 3;
+          _context7.prev = 0;
+          _context7.next = 3;
           return _order["default"].find({}).sort({
             updatedAt: 1
           }).limit(3);
         case 3:
-          order = _context6.sent;
+          order = _context7.sent;
           res.status(201).json(order);
-          _context6.next = 10;
+          _context7.next = 10;
           break;
         case 7:
-          _context6.prev = 7;
-          _context6.t0 = _context6["catch"](0);
+          _context7.prev = 7;
+          _context7.t0 = _context7["catch"](0);
           res.status(404).json({
             message: "Se produjo un error a la hora de solicitar la Order"
           });
         case 10:
         case "end":
-          return _context6.stop();
+          return _context7.stop();
       }
-    }, _callee6, null, [[0, 7]]);
+    }, _callee7, null, [[0, 7]]);
   }));
-  return function getOrderActualizaciones(_x11, _x12) {
-    return _ref6.apply(this, arguments);
+  return function getOrderActualizaciones(_x13, _x14) {
+    return _ref7.apply(this, arguments);
   };
 }();
 exports.getOrderActualizaciones = getOrderActualizaciones;

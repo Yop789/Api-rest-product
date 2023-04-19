@@ -36,7 +36,7 @@ router.route('/carts')
     .post(autheJWT.verifyToken, cartCtrol.createCart)
     .put(autheJWT.verifyToken, cartCtrol.updateCart)
     .delete(autheJWT.verifyToken, cartCtrol.deleteCart)
-
+// -----------------------order-------------------
 
 router.route('/order')
     .post(autheJWT.verifyToken, OrderCtrol.createOrder)
@@ -46,6 +46,11 @@ router.route('/order/:productId')
     .put(autheJWT.verifyToken, OrderCtrol.updateOrder)
     .get(autheJWT.verifyToken, OrderCtrol.getOrder)
     .delete(autheJWT.verifyToken, OrderCtrol.deleteOrder)
+
+router.route('/orderUser')
+    .get(autheJWT.verifyToken, OrderCtrol.getOrderUser)
+
+// --------------------codigo------------------
 
 router.route('/codigo')
     .post(codigoCtrol.createCodigo)

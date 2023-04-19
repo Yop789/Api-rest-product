@@ -69,6 +69,18 @@ export const getOrder = async (req, res) => {
       .json({ message: "Se produjo un error a la hora de solicitar la Order" });
   }
 };
+export const getOrderUser = async (req, res) => {
+  try {
+    let token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, config.Secret);
+    const order = await Orders.find({idUser:decoded.id});
+    res.status(201).json(order);
+  } catch (error) {
+    res
+      .status(404)
+      .json({ message: "Se produjo un error a la hora de solicitar la Order" });
+  }
+};
 
 export const getOrders = async (req, res) => {
   try {

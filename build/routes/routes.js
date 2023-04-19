@@ -31,8 +31,14 @@ router.route('/filtrar/:nombre').get(_index.autheJWT.verifyToken, productsCtrol.
 router.post('/signup', authCtrol.signUp);
 router.post('/signin', authCtrol.signIn);
 router.route('/carts').get(_index.autheJWT.verifyToken, cartCtrol.getCart).post(_index.autheJWT.verifyToken, cartCtrol.createCart).put(_index.autheJWT.verifyToken, cartCtrol.updateCart)["delete"](_index.autheJWT.verifyToken, cartCtrol.deleteCart);
+// -----------------------order-------------------
+
 router.route('/order').post(_index.autheJWT.verifyToken, OrderCtrol.createOrder).get(_index.autheJWT.verifyToken, OrderCtrol.getOrders);
 router.route('/order/:productId').put(_index.autheJWT.verifyToken, OrderCtrol.updateOrder).get(_index.autheJWT.verifyToken, OrderCtrol.getOrder)["delete"](_index.autheJWT.verifyToken, OrderCtrol.deleteOrder);
+router.route('/orderUser').get(_index.autheJWT.verifyToken, OrderCtrol.getOrderUser);
+
+// --------------------codigo------------------
+
 router.route('/codigo').post(codigoCtrol.createCodigo);
 router.route('/cambiarC').put(codigoCtrol.codigoComparar, userCtrol.cambiarContraseña);
 router.route('/copContras').post(codigoCtrol.codigoCompararA);
