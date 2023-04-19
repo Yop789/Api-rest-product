@@ -50,6 +50,10 @@ router.route('/order/:productId')
 router.route('/orderUser')
     .get(autheJWT.verifyToken, OrderCtrol.getOrderUser)
 
+router.route('/orderProduct/:productId')
+    .get(OrderCtrol.getProductsDian)
+    .post(OrderCtrol.getProductsDianExacto)
+
 // --------------------codigo------------------
 
 router.route('/codigo')
