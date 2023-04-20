@@ -27,6 +27,7 @@ export const signUp = async (req, res) => {
       numero,
       telefone,
       password: await User.encryptPassword(password),
+      status:true,
     });
     console.log(newUser);
     if (roles) {
@@ -56,7 +57,7 @@ export const signUp = async (req, res) => {
 export const signIn = async (req, res) => {
   try {
     // Request body email can be an email or username
-    const userFound = await User.findOne({ email: req.body.email }).populate(
+    const userFound = await User.findOne({ email: req.body.email ,status:{$ne: false}}).populate(
       "roles"
     );
 

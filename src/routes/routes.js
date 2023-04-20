@@ -47,6 +47,9 @@ router.route('/order/:productId')
     .get(autheJWT.verifyToken, OrderCtrol.getOrder)
     .delete(autheJWT.verifyToken, OrderCtrol.deleteOrder)
 
+router.route('/historialPedido')
+    .get(autheJWT.verifyToken,OrderCtrol.getOrderElim)
+
 router.route('/orderUser')
     .get(autheJWT.verifyToken, OrderCtrol.getOrderUser)
 
@@ -78,11 +81,15 @@ router.route('/user/:userId')
     .get(autheJWT.verifyToken, userCtrol.getUser)
     .put(autheJWT.verifyToken, userCtrol.updateUserById)
     .delete(autheJWT.verifyToken, userCtrol.deleteUser)
-
-
-
 router.route('/users')
     .get(autheJWT.verifyToken, userCtrol.getUsers)
+
+    router.route('/usersE')
+    .get(autheJWT.verifyToken, userCtrol.getUsersDesabilita)
+
+
+
+// -------------peticiones----------------------    
 
 router.route('/productType')
     .post(autheJWT.verifyToken, productsCtrol.getProductsType)

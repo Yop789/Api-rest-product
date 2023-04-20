@@ -9,7 +9,7 @@ export const createCodigo = async (req, res) => {
     const { correoElectronico } = req.body;
     const cod = generarCodigoAleatorio();
 
-    const user = await Users.find({ email: correoElectronico });
+    const user = await Users.find({ email: correoElectronico , status:{$ne:false}});
     if (user.length > 0) {
       const newCodigo = {
         codigo: cod,

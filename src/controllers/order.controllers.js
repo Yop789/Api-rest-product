@@ -72,7 +72,7 @@ export const getOrderUser = async (req, res) => {
   try {
     let token = req.headers["x-access-token"];
     const decoded = jwt.verify(token, config.Secret);
-    const order = await Orders.find({ idUser: decoded.id });
+    const order = await Orders.find({ idUser: decoded.id, status: {$ne: "En bodega"}});
     res.status(201).json(order);
   } catch (error) {
     res
@@ -83,7 +83,7 @@ export const getOrderUser = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const orders = await Orders.find();
+    const orders = await Orders.find({status: {$ne: "En bodega"}});
     res.status(201).json(orders);
   } catch (error) {
     res.status(404).json({
@@ -121,7 +121,7 @@ export const deleteOrder = async (req, res) => {
 
 export const getOrderActualizaciones = async (req, res) => {
   try {
-    const order = await Orders.find({}).sort({ updatedAt: 1 }).limit(3);
+    const order = await Orders.find({}).sort({ updatedAt: -1 }).limit(3);
     res.status(201).json(order);
   } catch (error) {
     res
@@ -134,7 +134,7 @@ export const getProductsDian = async (req, res) => {
   const id = req.params.productId;
   const fecha =  new Date();
   try {
-    const diaOrder = await Orders.find({
+    const diaOrder = await Orders.find({status: {$ne: "En bodega"},
       $or: [
         { dateDeliver: { $eq: fecha } },
         { dateEvent: { $eq: fecha } },
@@ -168,7 +168,7 @@ export const getProductsDianExacto = async (req, res) => {
   const {fecha}=req.body
   console.log(fecha)
   try {
-    const diaOrder = await Orders.find({
+    const diaOrder = await Orders.find({status: {$ne: "En bodega"},
       $or: [
         { dateDeliver: { $eq: new Date(fecha)} },
         { dateEvent: { $eq: new Date(fecha) } },
@@ -195,5 +195,15 @@ export const getProductsDianExacto = async (req, res) => {
     res
       .status(404)
       .json({ message: "Ocurrió un error al obtener el producto" });
+  }
+};
+export const getOrderElim = async (req, res) => {
+  try {
+    const orders = await Orders.find({status:"En bodega"});
+    res.status(201).json(orders);
+  } catch (error) {
+    res.status(404).json({
+      message: "Sucedio un error a la hora de realizar la peticion",
+    });
   }
 };

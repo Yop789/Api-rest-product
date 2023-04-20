@@ -38,7 +38,19 @@ export const getUsers = async (req, res) => {
   try {
     let token = req.headers["x-access-token"];
     const decoded = jwt.verify(token, config.Secret);
-    const users = await User.find({ _id: { $ne: decoded.id }});
+    const users = await User.find({ _id: { $ne: decoded.id }, status:{$ne:false}});
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log(error)
+  }
+
+};
+
+export const getUsersDesabilita = async (req, res) => {
+  try {
+    let token = req.headers["x-access-token"];
+    const decoded = jwt.verify(token, config.Secret);
+    const users = await User.find({status:false});
     return res.status(200).json(users);
   } catch (error) {
     console.log(error)
@@ -59,7 +71,13 @@ export const getUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.userId);
+    req.body={
+      status:false
+    }
+    const user = await User.findByIdAndUpdate(req.params.userId,req.body,
+      {
+        new: true,
+      });
     return res.status(200).json({menssage:'Usuario eliminado correctamente'});
   } catch (error) {
     return res.status(400).json({menssage:'Fallo al eliminar'});
