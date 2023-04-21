@@ -66,7 +66,7 @@ export const signIn = async (req, res) => {
         .status(400)
         .json({
           message:
-            "Correo electrónico no encontrado en nuestra base de datos. Por favor, verifica tus datos o regístrate si aún no lo has hecho.",
+            "El correo es incorrecto.",
         });
 
     const matchPassword = await User.comparePassword(
@@ -77,7 +77,7 @@ export const signIn = async (req, res) => {
     if (!matchPassword)
       return res.status(401).json({
         token: null,
-        message: "Invalid Password",
+        message: "La contraseña es incorrecta.",
       });
     const usuarios = [];
     if (userFound.roles.length > 0) {

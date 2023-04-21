@@ -13,6 +13,10 @@ var cartSchema = new _mongoose.Schema({
     type: String,
     require: true
   },
+  fecha: {
+    type: Date,
+    require: true
+  },
   products: [{
     _id: {
       type: String

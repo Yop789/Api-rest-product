@@ -4,7 +4,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateOrder = exports.getProductsDianExacto = exports.getProductsDian = exports.getOrders = exports.getOrderUser = exports.getOrderActualizaciones = exports.getOrder = exports.deleteOrder = exports.createOrder = void 0;
+exports.updateOrder = exports.getProductsDianExacto = exports.getProductsDian = exports.getOrders = exports.getOrderUser = exports.getOrderElim = exports.getOrderActualizaciones = exports.getOrder = exports.deleteOrder = exports.createOrder = void 0;
 var _order = _interopRequireDefault(require("../models/order"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _config = _interopRequireDefault(require("../config"));
@@ -115,7 +115,10 @@ var getOrderUser = /*#__PURE__*/function () {
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
           _context3.next = 5;
           return _order["default"].find({
-            idUser: decoded.id
+            idUser: decoded.id,
+            status: {
+              $ne: "En bodega"
+            }
           });
         case 5:
           order = _context3.sent;
@@ -147,7 +150,11 @@ var getOrders = /*#__PURE__*/function () {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
-          return _order["default"].find();
+          return _order["default"].find({
+            status: {
+              $ne: "En bodega"
+            }
+          });
         case 3:
           orders = _context4.sent;
           res.status(201).json(orders);
@@ -246,7 +253,7 @@ var getOrderActualizaciones = /*#__PURE__*/function () {
           _context7.prev = 0;
           _context7.next = 3;
           return _order["default"].find({}).sort({
-            updatedAt: 1
+            updatedAt: -1
           }).limit(3);
         case 3:
           order = _context7.sent;
@@ -281,6 +288,9 @@ var getProductsDian = /*#__PURE__*/function () {
           _context9.prev = 2;
           _context9.next = 5;
           return _order["default"].find({
+            status: {
+              $ne: "En bodega"
+            },
             $or: [{
               dateDeliver: {
                 $eq: fecha
@@ -374,6 +384,9 @@ var getProductsDianExacto = /*#__PURE__*/function () {
           _context11.prev = 3;
           _context11.next = 6;
           return _order["default"].find({
+            status: {
+              $ne: "En bodega"
+            },
             $or: [{
               dateDeliver: {
                 $eq: new Date(fecha)
@@ -455,3 +468,36 @@ var getProductsDianExacto = /*#__PURE__*/function () {
   };
 }();
 exports.getProductsDianExacto = getProductsDianExacto;
+var getOrderElim = /*#__PURE__*/function () {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(req, res) {
+    var orders;
+    return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+      while (1) switch (_context12.prev = _context12.next) {
+        case 0:
+          _context12.prev = 0;
+          _context12.next = 3;
+          return _order["default"].find({
+            status: "En bodega"
+          });
+        case 3:
+          orders = _context12.sent;
+          res.status(201).json(orders);
+          _context12.next = 10;
+          break;
+        case 7:
+          _context12.prev = 7;
+          _context12.t0 = _context12["catch"](0);
+          res.status(404).json({
+            message: "Sucedio un error a la hora de realizar la peticion"
+          });
+        case 10:
+        case "end":
+          return _context12.stop();
+      }
+    }, _callee12, null, [[0, 7]]);
+  }));
+  return function getOrderElim(_x21, _x22) {
+    return _ref12.apply(this, arguments);
+  };
+}();
+exports.getOrderElim = getOrderElim;

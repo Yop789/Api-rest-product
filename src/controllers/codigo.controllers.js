@@ -20,7 +20,7 @@ export const createCodigo = async (req, res) => {
       const cartSeve = await codigo.save();
       enviar.enviarEmailCodigo(cod, correoElectronico);
       res.status(201).json({ message: "Se envio un correo con codigo" });
-    } else res.status(404).json({ message: "Email incorrecto" });
+    } else res.status(404).json({ message: "El correo es incorrecto." });
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Error intentalo de nuebo" });
@@ -72,3 +72,29 @@ export const codigoCompararA = async (req, res, next) => {
     res.status(404).json({ message: "Error al  aser la peticion del codigo" });
   }
 };
+
+export const createCodigoReguistro = async (req, res) => {
+  try {
+    console.log("Saving Cart");
+    console.log(req.body);
+    const { correoElectronico } = req.body;
+    const user = await Users.find({ email: correoElectronico });
+    if(user.length == 0){
+      const cod = generarCodigoAleatorio();
+      const newCodigo = {
+        codigo: cod,
+        correoElectronico,
+      };
+      console.log(newCodigo);
+      const codigo = new Codigos(newCodigo);
+      const cartSeve = await codigo.save();
+      enviar.enviarEmailCodigo(cod, correoElectronico);
+      res.status(201).json({ message: "Se ha enviado un correo con un código." })
+    }else  res.status(200).json({ message: "Este correo electrónico ya existe, por favor ingresa otro." })
+    
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Ha ocurrido un error, por favor inténtalo de nuevo" });
+  }
+};
+

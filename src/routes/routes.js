@@ -62,6 +62,8 @@ router.route('/orderProduct/:productId')
 router.route('/codigo')
     .post(codigoCtrol.createCodigo)
 
+router.route('/codigoReguistro')
+    .post(codigoCtrol.createCodigoReguistro)
 
 router.route('/cambiarC')
     .put(codigoCtrol.codigoComparar, userCtrol.cambiarContraseña)

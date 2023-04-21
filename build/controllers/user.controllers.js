@@ -4,7 +4,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateUserById = exports.getUsers = exports.getUserActualizaciones = exports.getUser = exports.deleteUser = exports.createUser = exports.cambiarContraseña = void 0;
+exports.updateUserById = exports.getUsersDesabilita = exports.getUsers = exports.getUserActualizaciones = exports.getUser = exports.deleteUser = exports.createUser = exports.cambiarContraseña = void 0;
 var _User = _interopRequireDefault(require("../models/User.js"));
 var _Role = _interopRequireDefault(require("../models/Role.js"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
@@ -80,6 +80,9 @@ var getUsers = /*#__PURE__*/function () {
           return _User["default"].find({
             _id: {
               $ne: decoded.id
+            },
+            status: {
+              $ne: false
             }
           });
         case 5:
@@ -100,34 +103,38 @@ var getUsers = /*#__PURE__*/function () {
   };
 }();
 exports.getUsers = getUsers;
-var getUser = /*#__PURE__*/function () {
+var getUsersDesabilita = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
-    var user;
+    var token, decoded, users;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           _context3.prev = 0;
-          _context3.next = 3;
-          return _User["default"].findById(req.params.userId).populate("roles");
-        case 3:
-          user = _context3.sent;
-          return _context3.abrupt("return", res.status(200).json(user));
-        case 7:
-          _context3.prev = 7;
+          token = req.headers["x-access-token"];
+          decoded = _jsonwebtoken["default"].verify(token, _config["default"].Secret);
+          _context3.next = 5;
+          return _User["default"].find({
+            status: false
+          });
+        case 5:
+          users = _context3.sent;
+          return _context3.abrupt("return", res.status(200).json(users));
+        case 9:
+          _context3.prev = 9;
           _context3.t0 = _context3["catch"](0);
           console.log(_context3.t0);
-        case 10:
+        case 12:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 7]]);
+    }, _callee3, null, [[0, 9]]);
   }));
-  return function getUser(_x5, _x6) {
+  return function getUsersDesabilita(_x5, _x6) {
     return _ref3.apply(this, arguments);
   };
 }();
-exports.getUser = getUser;
-var deleteUser = /*#__PURE__*/function () {
+exports.getUsersDesabilita = getUsersDesabilita;
+var getUser = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
     var user;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
@@ -135,169 +142,201 @@ var deleteUser = /*#__PURE__*/function () {
         case 0:
           _context4.prev = 0;
           _context4.next = 3;
-          return _User["default"].findByIdAndDelete(req.params.userId);
+          return _User["default"].findById(req.params.userId).populate("roles");
         case 3:
           user = _context4.sent;
-          return _context4.abrupt("return", res.status(200).json({
-            menssage: 'Usuario eliminado correctamente'
-          }));
+          return _context4.abrupt("return", res.status(200).json(user));
         case 7:
           _context4.prev = 7;
           _context4.t0 = _context4["catch"](0);
-          return _context4.abrupt("return", res.status(400).json({
-            menssage: 'Fallo al eliminar'
-          }));
+          console.log(_context4.t0);
         case 10:
         case "end":
           return _context4.stop();
       }
     }, _callee4, null, [[0, 7]]);
   }));
-  return function deleteUser(_x7, _x8) {
+  return function getUser(_x7, _x8) {
     return _ref4.apply(this, arguments);
   };
 }();
-exports.deleteUser = deleteUser;
-var updateUserById = /*#__PURE__*/function () {
+exports.getUser = getUser;
+var deleteUser = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
-    var foundRoles, updateUser;
+    var user;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           _context5.prev = 0;
+          req.body = {
+            status: false
+          };
+          _context5.next = 4;
+          return _User["default"].findByIdAndUpdate(req.params.userId, req.body, {
+            "new": true
+          });
+        case 4:
+          user = _context5.sent;
+          return _context5.abrupt("return", res.status(200).json({
+            menssage: 'Usuario eliminado correctamente'
+          }));
+        case 8:
+          _context5.prev = 8;
+          _context5.t0 = _context5["catch"](0);
+          return _context5.abrupt("return", res.status(400).json({
+            menssage: 'Fallo al eliminar'
+          }));
+        case 11:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5, null, [[0, 8]]);
+  }));
+  return function deleteUser(_x9, _x10) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+exports.deleteUser = deleteUser;
+var updateUserById = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
+    var foundRoles, updateUser;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.prev = 0;
           console.log(req.body.roles);
           if (!req.body.roles) {
-            _context5.next = 7;
+            _context6.next = 7;
             break;
           }
-          _context5.next = 5;
+          _context6.next = 5;
           return _Role["default"].find({
             name: {
               $in: req.body.roles
             }
           });
         case 5:
-          foundRoles = _context5.sent;
+          foundRoles = _context6.sent;
           req.body.roles = foundRoles.map(function (role) {
             return role._id;
           });
         case 7:
-          _context5.next = 9;
+          _context6.next = 9;
           return _User["default"].findByIdAndUpdate(req.params.userId, req.body, {
             "new": true
           });
         case 9:
-          updateUser = _context5.sent;
+          updateUser = _context6.sent;
           res.status(200).json(updateUser);
-          _context5.next = 16;
+          _context6.next = 16;
           break;
         case 13:
-          _context5.prev = 13;
-          _context5.t0 = _context5["catch"](0);
+          _context6.prev = 13;
+          _context6.t0 = _context6["catch"](0);
           res.status(404).json({
             menssage: "Se encontro un error a la hora de realisar la actualizacion"
           });
         case 16:
         case "end":
-          return _context5.stop();
+          return _context6.stop();
       }
-    }, _callee5, null, [[0, 13]]);
+    }, _callee6, null, [[0, 13]]);
   }));
-  return function updateUserById(_x9, _x10) {
-    return _ref5.apply(this, arguments);
+  return function updateUserById(_x11, _x12) {
+    return _ref6.apply(this, arguments);
   };
 }();
 exports.updateUserById = updateUserById;
 var cambiarContraseña = /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(req, res) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
     var _req$body2, correoElectronico, password, l, user, ubdateUser;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) switch (_context6.prev = _context6.next) {
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
         case 0:
-          _context6.prev = 0;
+          _context7.prev = 0;
           _req$body2 = req.body, correoElectronico = _req$body2.correoElectronico, password = _req$body2.password;
-          _context6.next = 4;
+          _context7.next = 4;
           return _User["default"].encryptPassword(password);
         case 4:
-          _context6.t0 = _context6.sent;
+          _context7.t0 = _context7.sent;
           l = {
-            password: _context6.t0
+            password: _context7.t0
           };
-          _context6.next = 8;
+          _context7.next = 8;
           return _User["default"].find({
             email: correoElectronico
           });
         case 8:
-          user = _context6.sent;
+          user = _context7.sent;
           console.log(req.body.correoElectronico);
           if (!(user.length > 0)) {
-            _context6.next = 17;
+            _context7.next = 17;
             break;
           }
-          _context6.next = 13;
+          _context7.next = 13;
           return _User["default"].updateOne({
             email: correoElectronico
           }, l, {
             "new": true
           });
         case 13:
-          ubdateUser = _context6.sent;
+          ubdateUser = _context7.sent;
           res.status(201).json({
             messege: "Actualisasion existosa"
           });
-          _context6.next = 18;
+          _context7.next = 18;
           break;
         case 17:
           res.status(404).json({
             messege: "Correo no encontrado"
           });
         case 18:
-          _context6.next = 24;
+          _context7.next = 24;
           break;
         case 20:
-          _context6.prev = 20;
-          _context6.t1 = _context6["catch"](0);
-          console.log(_context6.t1);
+          _context7.prev = 20;
+          _context7.t1 = _context7["catch"](0);
+          console.log(_context7.t1);
           res.status(404).json({
             messege: "Sucedio un error a la hora de actualizar tu contraseña"
           });
         case 24:
         case "end":
-          return _context6.stop();
+          return _context7.stop();
       }
-    }, _callee6, null, [[0, 20]]);
+    }, _callee7, null, [[0, 20]]);
   }));
-  return function cambiarContraseña(_x11, _x12) {
-    return _ref6.apply(this, arguments);
+  return function cambiarContraseña(_x13, _x14) {
+    return _ref7.apply(this, arguments);
   };
 }();
 exports.cambiarContraseña = cambiarContraseña;
 var getUserActualizaciones = /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(req, res) {
     var user;
-    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-      while (1) switch (_context7.prev = _context7.next) {
+    return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+      while (1) switch (_context8.prev = _context8.next) {
         case 0:
-          _context7.prev = 0;
-          _context7.next = 3;
+          _context8.prev = 0;
+          _context8.next = 3;
           return _User["default"].find({}).sort({
             updatedAt: 1
           }).limit(3).populate("roles");
         case 3:
-          user = _context7.sent;
-          return _context7.abrupt("return", res.status(200).json(user));
+          user = _context8.sent;
+          return _context8.abrupt("return", res.status(200).json(user));
         case 7:
-          _context7.prev = 7;
-          _context7.t0 = _context7["catch"](0);
-          console.log(_context7.t0);
+          _context8.prev = 7;
+          _context8.t0 = _context8["catch"](0);
+          console.log(_context8.t0);
         case 10:
         case "end":
-          return _context7.stop();
+          return _context8.stop();
       }
-    }, _callee7, null, [[0, 7]]);
+    }, _callee8, null, [[0, 7]]);
   }));
-  return function getUserActualizaciones(_x13, _x14) {
-    return _ref7.apply(this, arguments);
+  return function getUserActualizaciones(_x15, _x16) {
+    return _ref8.apply(this, arguments);
   };
 }();
 exports.getUserActualizaciones = getUserActualizaciones;

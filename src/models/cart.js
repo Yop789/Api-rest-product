@@ -3,6 +3,7 @@ import mongoose, { Schema, Model } from "mongoose";
 const cartSchema = new Schema(
   {
     idUser: { type: String, require: true },
+    fecha:{ type: Date, require: true },
     products:[ {
         _id: { type: String },
         idProduct: { type: String,

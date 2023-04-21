@@ -9,7 +9,6 @@ var fs = require('fs');
 var enviarEmailCodigo = function enviarEmailCodigo(codigo, email) {
   var htmlContent = fs.readFileSync("build/EnviarGmail/gmaiCode.html", "utf8");
   var emailHtml = htmlContent.replace(/{{codigo}}/g, codigo).replace(/{{email}}/g, email);
-  console.log("Email a Administrador");
   _gmailTrasporter.transporter.sendMail({
     from: '"Dofest" <davidenriquelopezjuarez08@gmail.com>',
     // sender address
@@ -21,6 +20,5 @@ var enviarEmailCodigo = function enviarEmailCodigo(codigo, email) {
   }, function (error, info) {
     if (error) {} else {}
   });
-  console.log(codigo);
 };
 exports.enviarEmailCodigo = enviarEmailCodigo;

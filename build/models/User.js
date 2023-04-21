@@ -48,6 +48,9 @@ var userSchema = new _mongoose.Schema({
     type: String,
     required: true
   },
+  status: {
+    type: Boolean
+  },
   roles: [{
     type: _mongoose.Schema.Types.ObjectId,
     ref: "Role"

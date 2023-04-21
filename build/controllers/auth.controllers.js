@@ -44,7 +44,8 @@ var signUp = /*#__PURE__*/function () {
             calle: _context.t6,
             numero: _context.t7,
             telefone: _context.t8,
-            password: _context.t9
+            password: _context.t9,
+            status: true
           };
           newUser = new _context.t0(_context.t10);
           console.log(newUser);
@@ -122,7 +123,10 @@ var signIn = /*#__PURE__*/function () {
           _context2.prev = 0;
           _context2.next = 3;
           return _User["default"].findOne({
-            email: req.body.email
+            email: req.body.email,
+            status: {
+              $ne: false
+            }
           }).populate("roles");
         case 3:
           userFound = _context2.sent;
@@ -131,7 +135,7 @@ var signIn = /*#__PURE__*/function () {
             break;
           }
           return _context2.abrupt("return", res.status(400).json({
-            message: "Correo electrónico no encontrado en nuestra base de datos. Por favor, verifica tus datos o regístrate si aún no lo has hecho."
+            message: "El correo es incorrecto."
           }));
         case 6:
           _context2.next = 8;
@@ -144,7 +148,7 @@ var signIn = /*#__PURE__*/function () {
           }
           return _context2.abrupt("return", res.status(401).json({
             token: null,
-            message: "Invalid Password"
+            message: "La contraseña es incorrecta."
           }));
         case 11:
           usuarios = [];

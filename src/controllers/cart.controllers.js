@@ -21,9 +21,10 @@ export const createCart = async (req, res) => {
         res.status(201).json({ message: "Actualizacion completa" });
       }
     } else {
-      const { products } = req.body;
+      const { fecha,products } = req.body;
       const newCart = {
         idUser: decoded.id,
+        fecha:fecha,
         products: products,
       };
       const cart = new Carts(newCart);

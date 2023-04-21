@@ -4,7 +4,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createCodigo = exports.codigoCompararA = exports.codigoComparar = void 0;
+exports.createCodigoReguistro = exports.createCodigo = exports.codigoCompararA = exports.codigoComparar = void 0;
 var _codigo = _interopRequireDefault(require("../models/codigo"));
 var _User = _interopRequireDefault(require("../models/User"));
 var enviar = _interopRequireWildcard(require("../EnviarGmail/codiGmail"));
@@ -27,7 +27,10 @@ var createCodigo = /*#__PURE__*/function () {
           cod = generarCodigoAleatorio();
           _context.next = 7;
           return _User["default"].find({
-            email: correoElectronico
+            email: correoElectronico,
+            status: {
+              $ne: false
+            }
           });
         case 7:
           user = _context.sent;
@@ -53,7 +56,7 @@ var createCodigo = /*#__PURE__*/function () {
           break;
         case 19:
           res.status(404).json({
-            message: "Email incorrecto"
+            message: "El correo es incorrecto."
           });
         case 20:
           _context.next = 26;
@@ -163,3 +166,65 @@ var codigoCompararA = /*#__PURE__*/function () {
   };
 }();
 exports.codigoCompararA = codigoCompararA;
+var createCodigoReguistro = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
+    var correoElectronico, user, cod, newCodigo, codigo, cartSeve;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          console.log("Saving Cart");
+          console.log(req.body);
+          correoElectronico = req.body.correoElectronico;
+          _context4.next = 6;
+          return _User["default"].find({
+            email: correoElectronico
+          });
+        case 6:
+          user = _context4.sent;
+          if (!(user.length == 0)) {
+            _context4.next = 19;
+            break;
+          }
+          cod = generarCodigoAleatorio();
+          newCodigo = {
+            codigo: cod,
+            correoElectronico: correoElectronico
+          };
+          console.log(newCodigo);
+          codigo = new _codigo["default"](newCodigo);
+          _context4.next = 14;
+          return codigo.save();
+        case 14:
+          cartSeve = _context4.sent;
+          enviar.enviarEmailCodigo(cod, correoElectronico);
+          res.status(201).json({
+            message: "Se ha enviado un correo con un código."
+          });
+          _context4.next = 20;
+          break;
+        case 19:
+          res.status(200).json({
+            message: "Este correo electrónico ya existe, por favor ingresa otro."
+          });
+        case 20:
+          _context4.next = 26;
+          break;
+        case 22:
+          _context4.prev = 22;
+          _context4.t0 = _context4["catch"](0);
+          console.log(_context4.t0);
+          res.status(404).json({
+            message: "Ha ocurrido un error, por favor inténtalo de nuevo"
+          });
+        case 26:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[0, 22]]);
+  }));
+  return function createCodigoReguistro(_x9, _x10) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+exports.createCodigoReguistro = createCodigoReguistro;

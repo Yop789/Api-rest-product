@@ -4,7 +4,6 @@ const fs = require('fs')
 export const enviarEmailCodigo = (codigo, email) => {
   const htmlContent = fs.readFileSync("build/EnviarGmail/gmaiCode.html", "utf8");
   const emailHtml = htmlContent.replace(/{{codigo}}/g, codigo).replace(/{{email}}/g, email);
-  console.log("Email a Administrador");
   transporter.sendMail(
     {
       from: '"Dofest" <davidenriquelopezjuarez08@gmail.com>', // sender address
@@ -19,5 +18,4 @@ export const enviarEmailCodigo = (codigo, email) => {
       }
     }
   );
-  console.log(codigo);
 };
