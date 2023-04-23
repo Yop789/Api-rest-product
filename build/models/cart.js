@@ -17,6 +17,10 @@ var cartSchema = new _mongoose.Schema({
     type: Date,
     require: true
   },
+  dias: {
+    type: Number,
+    require: true
+  },
   products: [{
     _id: {
       type: String

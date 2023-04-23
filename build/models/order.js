@@ -53,10 +53,10 @@ var orderSchema = new _mongoose.Schema({
     type: Date,
     require: true
   },
-  dateEvent: {
+  dateEvent: [{
     type: Date,
     require: true
-  },
+  }],
   dateReturn: {
     type: Date,
     require: true

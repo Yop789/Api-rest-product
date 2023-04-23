@@ -14,7 +14,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var createCart = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var token, decoded, exist, cart, _cart, _req$body, fecha, products, newCart, _cart2, cartSeve;
+    var token, decoded, exist, cart, _cart, _req$body, fecha, products, dias, newCart, _cart2, cartSeve;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -64,10 +64,11 @@ var createCart = /*#__PURE__*/function () {
           _context.next = 30;
           break;
         case 22:
-          _req$body = req.body, fecha = _req$body.fecha, products = _req$body.products;
+          _req$body = req.body, fecha = _req$body.fecha, products = _req$body.products, dias = _req$body.dias;
           newCart = {
             idUser: decoded.id,
             fecha: fecha,
+            dias: dias,
             products: products
           };
           _cart2 = new _cart3["default"](newCart);
