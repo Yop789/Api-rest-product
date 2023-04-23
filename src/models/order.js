@@ -13,7 +13,7 @@ const orderSchema = new Schema(
     email:{ type: String, require: true},
     telefono:{ type: String, require: true},
     dateDeliver:{ type: Date, require: true},
-    dateEvent:{ type: Date, require: true},
+    dateEvent:[{ type: Date, require: true}],
     dateReturn: { type: Date, require: true},
     days: { type: Number, require: true},
     totalPrecio: { type: Number, require: true},

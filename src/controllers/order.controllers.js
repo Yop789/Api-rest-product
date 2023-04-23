@@ -72,7 +72,7 @@ export const getOrderUser = async (req, res) => {
   try {
     let token = req.headers["x-access-token"];
     const decoded = jwt.verify(token, config.Secret);
-    const order = await Orders.find({ idUser: decoded.id, status: {$ne: "En bodega"}});
+    const order = await Orders.find({ idUser: decoded.id, status: { $ne: "En bodega" } });
     res.status(201).json(order);
   } catch (error) {
     res
@@ -83,7 +83,7 @@ export const getOrderUser = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const orders = await Orders.find({status: {$ne: "En bodega"}});
+    const orders = await Orders.find({ status: { $ne: "En bodega" } });
     res.status(201).json(orders);
   } catch (error) {
     res.status(404).json({
@@ -132,23 +132,24 @@ export const getOrderActualizaciones = async (req, res) => {
 
 export const getProductsDian = async (req, res) => {
   const id = req.params.productId;
-  const fecha =  new Date();
+  const fecha = new Date();
   try {
-    const diaOrder = await Orders.find({status: {$ne: "En bodega"},
+    const diaOrder = await Orders.find({
+      status: { $ne: "En bodega" },
       $or: [
         { dateDeliver: { $eq: fecha } },
         { dateEvent: { $eq: fecha } },
-        { dateReturn: { $eq: fecha } },
+        { dateReturn: { $in: [fecha] }}
       ],
       products: { $elemMatch: { idProduct: id } },
     },
-    { "products.$": 1 });
+      { "products.$": 1 });
     if (diaOrder.length > 0) {
       console.log('entro al disminucion');
       const product = await Product.findById(id);
       let totalAmount = 0;
       diaOrder.forEach(async function (e) {
-          totalAmount += e.products[0].amount;
+        totalAmount += e.products[0].amount;
       });
       product.totalStock = product.totalStock - totalAmount;;
       res.status(200).json(product);
@@ -165,29 +166,40 @@ export const getProductsDian = async (req, res) => {
 };
 export const getProductsDianExacto = async (req, res) => {
   const id = req.params.productId;
-  const {fecha}=req.body
-  console.log(fecha)
+  const { fecha, fechas } = req.body
   try {
-    const diaOrder = await Orders.find({status: {$ne: "En bodega"},
-      $or: [
-        { dateDeliver: { $eq: new Date(fecha)} },
-        { dateEvent: { $eq: new Date(fecha) } },
-        { dateReturn: { $eq: new Date(fecha) } },
-      ],
-      products: { $elemMatch: { idProduct: id } },
-    },
-    { "products.$": 1 });
-    if (diaOrder.length > 0) {
-      console.log('entro al disminucion');
+    let cantidad = 0;
+
+    if (fechas.length !== 0) {
+      for (const e of fechas) {
+        const diaOrder = await Orders.find({
+          status: { $ne: "En bodega" },
+          $or: [
+            { dateDeliver: { $eq: new Date(e) } },
+            { dateEvent: { $eq: new Date(e) } },
+            { dateReturn: { $eq: new Date(e) } },
+          ],
+          products: { $elemMatch: { idProduct: id } },
+        },
+          { "products.$": 1 });
+          console.log(`Encontró datos con fecha ${e}`);
+        if (diaOrder.length > 0) {
+          
+          let totalAmount = 0;
+
+          for (const order of diaOrder) {
+            totalAmount += order.products[0].amount;
+          }
+
+          if (cantidad === 0 || cantidad < totalAmount) {
+            cantidad = totalAmount;
+          }
+        }
+      }
+      console.log(cantidad)
       const product = await Product.findById(id);
-      let totalAmount = 0;
-      diaOrder.forEach(async function (e) {
-          totalAmount += e.products[0].amount;
-      });
-      product.totalStock = product.totalStock - totalAmount;;
-      res.status(200).json(product);
-    } else {
-      const product = await Product.findById(id);
+
+      product.totalStock = product.totalStock - cantidad;
       res.status(200).json(product);
     }
   } catch (error) {
@@ -199,7 +211,7 @@ export const getProductsDianExacto = async (req, res) => {
 };
 export const getOrderElim = async (req, res) => {
   try {
-    const orders = await Orders.find({status:"En bodega"});
+    const orders = await Orders.find({ status: "En bodega" });
     res.status(201).json(orders);
   } catch (error) {
     res.status(404).json({

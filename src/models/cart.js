@@ -4,6 +4,7 @@ const cartSchema = new Schema(
   {
     idUser: { type: String, require: true },
     fecha:{ type: Date, require: true },
+    dias:{ type: Number, require: true },
     products:[ {
         _id: { type: String },
         idProduct: { type: String,
