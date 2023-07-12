@@ -2,12 +2,12 @@ import express,{ Application}  from "express";
 import morgan from "morgan";
 import pkg from "../package.json"
 import path from 'path';
-import { createRoles } from "./libs/initialSetup";
+
 import router from "./routes/routes";
 import cors from "cors"
 
 const app = express();
-createRoles();
+
 
 app.set("pkg", pkg)
 app.use(express.json())
